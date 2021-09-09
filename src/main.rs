@@ -31,8 +31,15 @@ fn world() -> World {
         Some("cat.jpg".to_string()),
     );
 
-    let _sallys = world.create_restaurant("Sally's Savory Sautés".to_string(), "".to_string());
-    let _docs = world.create_restaurant("Doc's Diner".to_string(), "".to_string());
+    let _sallys = world.create_restaurant(
+        "Sally's Savory Sautés".to_string(),
+        "Sally Seeks Sanitary Sambuca Shots".to_string(),
+    );
+
+    let _docs = world.create_restaurant(
+        "Doc's Diner".to_string(),
+        "Doc Defines Dogday Dinners".to_string(),
+    );
 
     world
 }
