@@ -89,7 +89,8 @@ mod user {
                 .or(register_action(db.clone()))
                 .or(check(db.clone()))
                 .or(login())
-                .or(login_action(db)),
+                .or(login_action(db))
+                .or(logout()),
         )
     }
 
@@ -141,6 +142,10 @@ mod user {
             .and(authn())
             .and(with(db))
             .and_then(handlers::check)
+    }
+
+    fn logout() -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone {
+        warp::path!("logout").and_then(handlers::logout)
     }
 }
 

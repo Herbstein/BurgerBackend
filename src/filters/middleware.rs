@@ -11,8 +11,10 @@ pub fn authn_optional() -> impl Filter<Extract = (AuthInfo,), Error = Rejection>
         })
 }
 
-pub fn authn() -> impl Filter<Extract = (AuthnToken,), Error = Rejection> + Copy {
-    cookie("token").and_then(cookie_authn_step2)
+pub fn authn() -> impl Filter<Extract = (usize,), Error = Rejection> + Copy {
+    cookie("token")
+        .and_then(cookie_authn_step2)
+        .map(|token: AuthnToken| token.claims.user_id as usize)
 }
 
 async fn cookie_authn_step2(token_str: String) -> Result<AuthnToken, Rejection> {

@@ -94,6 +94,7 @@ pub async fn show_restaurant(id: usize, auth: AuthInfo, db: Db) -> Result<impl R
     struct RestaurantTemplate {
         id: usize,
         name: String,
+        description: String,
         reviews: Vec<ReviewDisplay>,
         auth_info: AuthInfo,
     }
@@ -135,6 +136,7 @@ pub async fn show_restaurant(id: usize, auth: AuthInfo, db: Db) -> Result<impl R
 
     Ok(RestaurantTemplate {
         id: restaurant.id,
+        description: restaurant.description,
         name: restaurant.name,
         auth_info: auth,
         reviews,
@@ -143,19 +145,17 @@ pub async fn show_restaurant(id: usize, auth: AuthInfo, db: Db) -> Result<impl R
 
 pub async fn create_review(
     restaurant_id: usize,
-    token: AuthnToken,
+    auth_user_id: usize,
     review: CreateReview,
     db: Db,
 ) -> Result<impl Reply, Rejection> {
     let mut world = db.lock().await;
 
-    let user_id = token.claims.user_id as usize;
-
     let review = world.create_review(
         review.review,
         Rating::new(review.rating)?,
         restaurant_id,
-        user_id,
+        auth_user_id,
         None,
     );
 
@@ -329,18 +329,16 @@ pub async fn profile(user: usize, db: Db) -> Result<impl Reply, Rejection> {
     })
 }
 
-pub async fn check(token: AuthnToken, db: Db) -> Result<impl Reply, Rejection> {
+pub async fn check(auth_user_id: usize, db: Db) -> Result<impl Reply, Rejection> {
     #[derive(Template)]
     #[template(path = "user/check.html")]
     struct ProfileTemplate {
         name: String,
     }
 
-    let user_id = token.claims.user_id as usize;
-
     let world = db.lock().await;
     let user = world
-        .find_user(user_id)
+        .find_user(auth_user_id)
         .ok_or_else(|| Rejection::from(ServiceError::NotFound))?;
 
     Ok(ProfileTemplate { name: user.name })
@@ -366,5 +364,13 @@ pub async fn login_user_action(incoming: UserPassword, db: Db) -> Result<impl Re
 
     Ok(warp::redirect::see_other(
         Uri::from_str(&format!("/users/{}", user.id)).unwrap(),
+    ))
+}
+
+pub async fn logout() -> Result<impl Reply, Infallible> {
+    Ok(warp::reply::with_header(
+        warp::redirect::see_other(Uri::from_static("/")),
+        "Set-Cookie",
+        "",
     ))
 }

@@ -8,6 +8,7 @@
 
     <h1>User: {{name}}</h1>
     <br />
+    {% if reviews.len() > 0 %}
     <h1>Reviews by user:</h1>
     <table>
       <thead>
@@ -31,5 +32,6 @@
         {% endfor %}
       </tbody>
     </table>
+    {% endif %}
   </body>
 </html>

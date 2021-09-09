@@ -11,7 +11,7 @@ pub type Db = Arc<Mutex<World>>;
 pub struct Restaurant {
     pub id: usize,
     pub name: String,
-    pub location: (u32, u32),
+    pub description: String,
 }
 
 /// Real value in the [0; 5] range
@@ -54,9 +54,13 @@ pub struct World {
 }
 
 impl World {
-    pub fn create_restaurant(&mut self, name: String, location: (u32, u32)) -> usize {
+    pub fn create_restaurant(&mut self, name: String, description: String) -> usize {
         let id = self.restaurants.len();
-        self.restaurants.push(Restaurant { id, name, location });
+        self.restaurants.push(Restaurant {
+            id,
+            name,
+            description,
+        });
         id
     }
 
