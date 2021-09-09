@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Burger Backend - {{name}}</title>
+  </head>
+  <body>
+    {% include "header.html" %}
+
+    <h1>User: {{name}}</h1>
+    <br />
+    <h1>Reviews by user:</h1>
+    <table>
+      <thead>
+        <th>Restaurant</th>
+        <th>Review</th>
+        <th>Rating</th>
+      </thead>
+      <tbody>
+        {% for r in reviews %}
+        <tr>
+          <td>
+            <a href="/restaurants/{{r.restaurant.id}}">{{r.restaurant.name}}</a>
+          </td>
+          <td>
+            <a href="/restaurants/{{r.restaurant.id}}/reviews/{{r.id}}"
+              >{{r.comment}}</a
+            >
+          </td>
+          <td>{{r.rating}}/5 ⭐</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

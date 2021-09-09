@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Burger Backend - {{name}}</title>
+  </head>
+  <body>
+    {% include "header.html" %}
+
+    <h1>{{name}}</h1>
+
+    {% if reviews.len() > 0 %}
+    <table>
+      <thead>
+        <th>User</th>
+        <th>Review</th>
+        <th>Rating</th>
+      </thead>
+      <tbody>
+        {% for r in reviews %}
+        <tr>
+          <td>
+            <a href="/users/{{r.user.id}}">{{r.user.name}}</a>
+          </td>
+          <td>
+            <a href="/restaurants/{{id}}/reviews/{{r.id}}">{{r.comment}}</a>
+          </td>
+          <td>{{r.rating}}/5 ⭐</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+
+    <h1>Review</h1>
+    {% match auth_info %} {% when AuthInfo::Authenticated with (user_id) %}
+    <form action="/restaurants/{{id}}/reviews" method="POST">
+      <div>
+        <label for="review">Enter your review: </label>
+        <textarea id="review" name="review" required></textarea>
+      </div>
+      <div>
+        <label for="rating">Enter your [0;5] rating</label>
+        <input name="rating" type="number" required />
+      </div>
+      <div>
+        <input type="submit" value="Submit" />
+      </div>
+    </form>
+    {% else %}
+    <p>Login to review this restaurant</p>
+    {% endmatch %}
+  </body>
+</html>

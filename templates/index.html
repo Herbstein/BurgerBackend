@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Burger Backend</title>
+  </head>
+  <body>
+    {% include "header.html" %}
+
+    <h1>
+      Welcome to Burger Backend! These are the restaurants available in your
+      area:
+    </h1>
+
+    {% for r in restaurants %}
+    <li>
+      <a href="/restaurants/{{r.id}}">
+        {{r.name}} {% if r.review_summary.count > 0 %} -
+        {{r.review_summary.average}}/5 ⭐ ({{r.review_summary.count}}) {% endif
+        %}
+      </a>
+    </li>
+    {% endfor %}
+  </body>
+</html>

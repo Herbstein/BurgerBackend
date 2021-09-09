@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Burger Backend - Register User</title>
+  </head>
+  <body>
+    {% include "header.html" %}
+
+    <h1>Register an account</h1>
+    <form action="/users/" method="POST">
+      <div>
+        <label for="username">Enter your name: </label>
+        <input type="text" name="username" required />
+      </div>
+      <div>
+        <label for="password">Enter your password: </label>
+        <input type="password" name="password" required />
+      </div>
+      <div>
+        <input type="submit" value="Register" />
+      </div>
+    </form>
+  </body>
+</html>

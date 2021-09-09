@@ -1,0 +1,6 @@
+/target
+/.vscode
+/cache
+
+*.log
+BurgerBackend.md
