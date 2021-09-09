@@ -80,7 +80,7 @@ impl AuthnToken {
         b.to_vec()
     }
 
-    pub fn from_bytes<'a>(bytes: &'a [u8]) -> Result<Self> {
+    pub fn from_bytes(bytes: &[u8]) -> Result<Self> {
         let mut buf = [0u8; 8];
         buf.copy_from_slice(&bytes[0..8]);
         let iat = i64::from_be_bytes(buf);

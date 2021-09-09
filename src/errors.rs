@@ -105,5 +105,6 @@ impl From<StatusCode> for ErrMsg {
 }
 
 pub async fn handle_rejection(r: Rejection) -> Result<impl Reply, Infallible> {
+    eprintln!("{:?}", r);
     Ok(ErrMsg::from(r).into_reply())
 }

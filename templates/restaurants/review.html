@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>
-      Burger Backend - {{user.name}}'s review of {{restaurant.name}}
-    </title>
-  </head>
-  <body>
-    {% include "header.html" %}
 
-    <h1>
-      <a href="/users/{{user.id}}">{{user.name}}</a>'s review of
-      <a href="/restaurants/{{restaurant.id}}">{{restaurant.name}}</a>
-    </h1>
+<head>
+  <title>
+    Burger Backend - {{user.name}}'s review of {{restaurant.name}}
+  </title>
+</head>
 
-    <p></p>
-    <p>{{review}}</p>
+<body>
+  {% include "header.html" %}
 
-    {% match image_path %} {% when Some with (image_path) %}
-    <img src="/static/{{image_path}}" width="500px" />
-    {% else %}
-    <img src="/static/not_found.jpg" width="500px" />
-    {% endmatch %}
-  </body>
+  <h1>
+    <a href="/users/{{user.id}}">{{user.name}}</a>'s review of
+    <a href="/restaurants/{{restaurant.id}}">{{restaurant.name}}</a>
+  </h1>
+
+  <p></p>
+  <p>{{review}}</p>
+
+  {% match image_path %} {% when Some with (image_path) %}
+  <img src="/static/{{image_path}}" width="500px" />
+  {% else %}
+  <img src="/static/not_found.jpg" width="500px" />
+  {% endmatch %}
+</body>
+
 </html>

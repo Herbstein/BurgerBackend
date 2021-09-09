@@ -1,10 +1,12 @@
-use warp::{cookie, Filter, Rejection};
+use std::convert::Infallible;
+
+use warp::{cookie, filters::cookie::optional, Filter, Rejection};
 
 use crate::{crypto::authn::AuthnToken, errors::ServiceError, models::AuthInfo};
 
-pub fn authn_optional() -> impl Filter<Extract = (AuthInfo,), Error = Rejection> + Copy {
-    cookie("token")
-        .map(cookie_authn_step2_optional)
+pub fn authn_optional() -> impl Filter<Extract = (AuthInfo,), Error = Infallible> + Copy {
+    optional("token")
+        .map(|opt: Option<String>| opt.and_then(cookie_authn_step2_optional))
         .map(|o: Option<AuthnToken>| {
             o.map(|a| AuthInfo::Authenticated(a.claims.user_id as usize))
                 .unwrap_or(AuthInfo::Anonymous)

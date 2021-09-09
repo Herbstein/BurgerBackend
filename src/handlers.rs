@@ -1,10 +1,7 @@
 use std::{convert::Infallible, str::FromStr};
 
 use askama_warp::Template;
-use warp::{
-    hyper::{Response, Uri},
-    Rejection, Reply,
-};
+use warp::{hyper::Uri, Rejection, Reply};
 
 use crate::{
     crypto::{authn::AuthnToken, pwhash},
@@ -268,7 +265,6 @@ pub async fn register_user(user: UserPassword, db: Db) -> Result<impl Reply, Rej
     };
 
     let token = AuthnToken::from_user_id(user_id as i64)?;
-    Response::builder().header("Set-Cookie", token.header_val());
 
     // Post/Redirect/Get pattern
     Ok(warp::reply::with_header(
@@ -362,8 +358,14 @@ pub async fn login_user_action(incoming: UserPassword, db: Db) -> Result<impl Re
 
     pwhash::verify(&user.hash, &incoming.password)?;
 
-    Ok(warp::redirect::see_other(
-        Uri::from_str(&format!("/users/{}", user.id)).unwrap(),
+    let token = AuthnToken::from_user_id(user.id as i64)?;
+
+    Ok(warp::reply::with_header(
+        warp::redirect::see_other(
+            Uri::from_str(&format!("/users/{}", user.id)).expect("This is known to be well-formed"),
+        ),
+        "Set-Cookie",
+        token.header_val(),
     ))
 }
 
@@ -371,6 +373,6 @@ pub async fn logout() -> Result<impl Reply, Infallible> {
     Ok(warp::reply::with_header(
         warp::redirect::see_other(Uri::from_static("/")),
         "Set-Cookie",
-        "",
+        "token=;Path=/;SameSite=Strict;Secure;HttpOnly;expires=Thu, 01 Jan 1970 00:00:00 GMT",
     ))
 }
