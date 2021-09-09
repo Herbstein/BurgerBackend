@@ -38,7 +38,7 @@ fn world() -> World {
 
     let _docs = world.create_restaurant(
         "Doc's Diner".to_string(),
-        "Doc Defines Dogday Dinners".to_string(),
+        "Doc Devours Dogday Dinners".to_string(),
     );
 
     world

@@ -131,7 +131,7 @@ impl KeyPair {
         self.0.verify(message, signature)
     }
 
-    pub fn from_bytes<'a>(bytes: &'a [u8]) -> Result<Self> {
+    pub fn from_bytes(bytes: &[u8]) -> Result<Self> {
         Ok(Self(Keypair::from_bytes(bytes)?))
     }
 
@@ -140,7 +140,7 @@ impl KeyPair {
     }
 
     pub fn from_str(s: &str) -> Result<Self> {
-        Ok(Self::from_bytes(&base64::decode(s)?.to_vec())?)
+        Self::from_bytes(&base64::decode(s)?.to_vec())
     }
 
     pub fn to_str(&self) -> String {
@@ -155,7 +155,7 @@ impl KeyPair {
 
     fn from_file(keyfile: &str) -> Result<Self> {
         let content_str = fs::read_to_string(keyfile)?;
-        Ok(Self::from_str(&content_str)?)
+        Self::from_str(&content_str)
     }
 
     fn from_file_or_new(keyfile: &str) -> Result<Self> {
