@@ -207,7 +207,7 @@ pub async fn show_review(
 
     Ok(ShowReviewTemplate {
         review: review.comment,
-        image_path: None,
+        image_path: review.image_name,
         user: UserDisplay {
             id: user.id,
             name: user.name,
