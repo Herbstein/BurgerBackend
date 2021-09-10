@@ -17,7 +17,7 @@ workspace "Burger Backend" "Burger Backend 1.0™" {
         burger -> email "Send verification and recovery emails"
         burger -> logs "Forward logs to log management"
         
-        user -> email "Recover passwords and get notifications"
+        email -> user "Send verification and notficiations"
         user -> front "Finds restaurants and posts reviews"
         
         front -> webapp "Forwards interactions via HTTP"
